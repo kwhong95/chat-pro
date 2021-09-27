@@ -6,7 +6,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-const config: webpack.Configuration | any = {
+const config: webpack.Configuration = {
   name: 'chat-pro',
   mode: isDevelopment ? 'development': 'production',
   devtool: isDevelopment ? 'inline-source-map' : 'hidden-source-map',
@@ -41,6 +41,14 @@ const config: webpack.Configuration | any = {
             '@babel/preset-react',
             '@babel/preset-typescript'
           ],
+          env: {
+            development: {
+              plugins: [['@emotion', { sourceMap: true, }], require.resolve('react-refresh/babel')]
+            },
+            production: {
+              plugins: ['@emotion'],
+            },
+          },
         },
         exclude: path.join(__dirname, 'node_modules'),
       },
@@ -60,6 +68,7 @@ const config: webpack.Configuration | any = {
     publicPath: '/dist/',
   },
   devServer: {
+    historyApiFallback: true,
     port: 3090,
     publicPath: '/dist/',
   }
